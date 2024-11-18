@@ -15,6 +15,7 @@ Editor::Editor()
 void Editor::display()
 {
     system("cls");
+
     for (int i = 0; i < lines.size(); i++)
     {
         for (int j = 0; j < lines[i].size(); j++)
@@ -41,9 +42,10 @@ void Editor::move(int ch)
     switch (ch)
     {
     case 13:
-        lines[currentLine].push_back('\n');
         lines.push_back(vector<char>());
-
+        this->currentLine++;
+        this->cursorPos = 0;
+        break;
     case 75: // Left arrow key
         if (this->cursorPos != 0)
         {
@@ -51,7 +53,10 @@ void Editor::move(int ch)
         }
         break;
     case 77: // Right arrow key
-        this->cursorPos++;
+        if (this->cursorPos != lines[this->currentLine].size())
+        {
+            this->cursorPos++;
+        }
         break;
     case 72: // Up arrow key
         if (this->currentLine != 0)
@@ -60,9 +65,10 @@ void Editor::move(int ch)
         }
         break;
     case 80: // Down arrow key
-        if (this->currentLine != lines.size())
+        if (this->currentLine != lines.size() - 1)
         {
             this->currentLine++;
+            this->cursorPos = 0;
         }
         break;
 
@@ -76,10 +82,6 @@ void Editor::type(char c)
     while (this->currentLine >= lines.size())
     {
         lines.push_back(vector<char>());
-    }
-    while (this->cursorPos >= lines[this->currentLine].size())
-    {
-        lines[this->currentLine].push_back(' ');
     }
     if (this->cursorPos == lines[this->currentLine].size())
     {
