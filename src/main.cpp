@@ -8,7 +8,7 @@ int main()
 {
 
     Editor *editor = new Editor;
-
+    system("cls");
     while (true)
     {
         editor->display();
@@ -20,8 +20,13 @@ int main()
 
             editor->move(ch);
         }
+        else if (ch == 8 || ch == 13 || ch == 9)
+        {
+            editor->specialKeys(ch);
+        }
         else if (ch == 3)
         {
+            system("cls");
             break;
         }
         else

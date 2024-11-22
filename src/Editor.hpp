@@ -2,6 +2,7 @@
 #define EDITOR_HPP
 #include <vector>
 #include <string>
+#include <windows.h>
 
 using namespace std;
 
@@ -12,11 +13,14 @@ public:
     void display();
     void move(int ch);
     void type(char c);
+    void specialKeys(int ch);
 
 private:
     vector<vector<char>> lines;
-    int currentLine;
-    int cursorPos;
+    short currentLine;
+    short cursorPos;
+    COORD coord;
+    HANDLE hConsole;
 };
 
 #endif
