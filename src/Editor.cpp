@@ -25,8 +25,21 @@ void Editor::display()
     {
         DWORD charsWritten;
 
+        std::string blank(consoleWidth, ' ');
+        WriteConsoleOutputCharacterA(
+            this->hConsole,
+            blank.c_str(),
+            consoleWidth,
+            {0, (SHORT)i},
+            &charsWritten);
+
         std::string stringedArray(lines[i].begin(), lines[i].end());
-        WriteConsoleOutputCharacterA(this->hConsole, stringedArray.c_str(), lines[i].size() + 1, {0, (SHORT)i}, &charsWritten);
+        WriteConsoleOutputCharacterA(
+            this->hConsole,
+            stringedArray.c_str(),
+            lines[i].size(),
+            {0, (SHORT)i},
+            &charsWritten);
     }
 }
 
@@ -99,11 +112,15 @@ void Editor::specialKeys(int ch)
         int lineLength = lines[this->currentLine].size();
         if (lineLength > 0)
         {
-            for (short i = this->cursorPos - 1; i < lineLength; i++)
-            {
-                lines[this->currentLine][i] = lines[this->currentLine][i++];
-            }
-            lines[this->currentLine].resize(lineLength - 1);
+            lines[this->currentLine].erase(lines[currentLine].begin() + this->cursorPos);
+            this->move(75);
+        }
+        else if (lineLength == 0 && lines.size() > 1)
+        {
+            this->currentLine--;
+            this->cursorPos = lines[this->currentLine].size();
+            SetConsoleCursorPosition(this->hConsole, {this->cursorPos, this->currentLine});
+            lines[this->currentLine].erase(lines[currentLine].begin() + this->cursorPos);
             this->move(75);
         }
         break;
